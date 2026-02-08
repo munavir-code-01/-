@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Secret Chat</title>
+    <style>
+        /* CSS: Smooth Background & Animations */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(-45deg, #0f0f0f, #1a1a2e, #16213e, #0f0f0f);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #ffffff;
+            overflow: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .page {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hidden { display: none !important; }
+
+        /* Login Box Animation */
+        .login-box {
+            background: rgba(26, 26, 26, 0.9);
+            padding: 40px;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            text-align: center;
+            width: 320px;
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
+            animation: slideIn 1s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+        }
+
+        @keyframes slideIn {
+            0% { opacity: 0; transform: translateY(100px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 12px 0;
+            border-radius: 12px;
+            border: 1px solid #333;
+            background: #222;
+            color: white;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(90deg, #00d4ff, #0055ff);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        /* Home Page Animations */
+        .glow-text {
+            font-size: 3.5rem;
+            margin-bottom: 0;
+            background: linear-gradient(90deg, #fff, #00d4ff, #fff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: shine 3s linear infinite;
+        }
+
+        /* Typing Animation for "Welcome to chat box" */
+        .typing-text {
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            color: #00d4ff;
+            border-right: 2px solid #00d4ff;
+            white-space: nowrap;
+            overflow: hidden;
+            width: 0;
+            margin: 10px auto;
+        }
+
+        .start-typing {
+            animation: typing 3s steps(20) forwards, blink 0.7s infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink {
+            50% { border-color: transparent; }
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        /* Floating Action Button (+) */
+        .fab {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: 70px;
+            height: 70px;
+            background: #00d4ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: #000;
+            cursor: pointer;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 20px rgba(0, 212, 255, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 212, 255, 0); }
+        }
+
+        .modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="page-auth" class="page">
+        <div class="login-box">
+            <h2>Secret Space</h2>
+            <input type="text" id="reg-user" placeholder="Enter Username">
+            <input type="password" id="reg-pass" placeholder="Enter Password">
+            <button onclick="handleLogin()">Get Started</button>
+        </div>
+    </div>
+
+    <div id="page-home" class="page hidden">
+        <div class="welcome-container" style="text-align: center;">
+            <h1 class="glow-text" id="welcome-user">Hello</h1>
+            <div id="sub-text" class="typing-text">WELCOME TO CHAT BOX</div>
+        </div>
+        
+        <div class="fab" onclick="openPrivateChat()">+</div>
+    </div>
+
+    <div id="chat-modal" class="modal hidden">
+        <div class="login-box">
+            <h3>New Private Chat</h3>
+            <input type="text" id="peer-user" placeholder="Friend's Name">
+            <input type="password" id="chat-key" placeholder="Chat Password">
+            <button onclick="startChat()">Open Chat</button>
+            <button style="background: #333; margin-top: 10px;" onclick="closeModal()">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        function handleLogin() {
+            const user = document.getElementById('reg-user').value;
+            if (user) {
+                document.getElementById('page-auth').classList.add('hidden');
+                document.getElementById('page-home').classList.remove('hidden');
+                document.getElementById('welcome-user').innerText = "Hello, " + user;
+                
+                // Trigger typing animation when home loads
+                document.getElementById('sub-text').classList.add('start-typing');
+            } else {
+                alert("Please pick a username!");
+            }
+        }
+
+        function openPrivateChat() {
+            document.getElementById('chat-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('chat-modal').classList.add('hidden');
+        }
+
+        function startChat() {
+            const peer = document.getElementById('peer-user').value;
+            if (peer) {
+                alert("Secure room ready for " + peer);
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
