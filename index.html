@@ -301,6 +301,172 @@
         </div>
     </div>
 
+    <div id="chat-modal" class="modal hidden"><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Secret Chat</title>
+    <style>
+        /* CSS: Smooth Background & Animations */
+        body, html {
+            margin: 0; padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(-45deg, #0f0f0f, #1a1a2e, #16213e, #0f0f0f);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #ffffff; overflow: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .page {
+            height: 100vh; width: 100vw;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+        }
+
+        .hidden { display: none !important; }
+
+        /* Login Box */
+        .login-box {
+            background: rgba(26, 26, 26, 0.9);
+            padding: 40px; border-radius: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            text-align: center; width: 320px;
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
+            animation: slideIn 1s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+        }
+
+        @keyframes slideIn {
+            0% { opacity: 0; transform: translateY(100px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        input {
+            width: 100%; padding: 12px; margin: 12px 0;
+            border-radius: 12px; border: 1px solid #333;
+            background: #222; color: white; box-sizing: border-box;
+        }
+
+        button {
+            padding: 12px; border: none; border-radius: 12px;
+            background: linear-gradient(90deg, #00d4ff, #0055ff);
+            color: white; font-weight: bold; cursor: pointer; transition: 0.3s;
+        }
+
+        /* Home Page */
+        .glow-text {
+            font-size: 3.5rem; margin-bottom: 0;
+            background: linear-gradient(90deg, #fff, #00d4ff, #fff);
+            background-clip: text; -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; background-size: 200% auto;
+            animation: shine 3s linear infinite;
+        }
+
+        .typing-text {
+            font-size: 1.2rem; letter-spacing: 3px; color: #00d4ff;
+            border-right: 2px solid #00d4ff; white-space: nowrap;
+            overflow: hidden; width: 0; margin: 10px auto;
+        }
+
+        .start-typing {
+            animation: typing 3s steps(20) forwards, blink 0.7s infinite;
+        }
+
+        @keyframes typing { from { width: 0; } to { width: 100%; } }
+        @keyframes blink { 50% { border-color: transparent; } }
+        @keyframes shine { to { background-position: 200% center; } }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed; bottom: 40px; right: 40px;
+            width: 70px; height: 70px; background: #00d4ff;
+            border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; font-size: 40px; color: #000;
+            cursor: pointer; animation: pulse 2s infinite; z-index: 10;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 20px rgba(0, 212, 255, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 212, 255, 0); }
+        }
+
+        /* Chat Screen */
+        .chat-container {
+            width: 100%; max-width: 500px; height: 100vh;
+            display: flex; flex-direction: column; background: rgba(0,0,0,0.9);
+        }
+
+        .chat-header {
+            padding: 20px; background: #1a1a2e; display: flex;
+            align-items: center; border-bottom: 1px solid #00d4ff;
+        }
+
+        .messages-area {
+            flex: 1; padding: 20px; overflow-y: auto;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+
+        .message {
+            padding: 10px 15px; border-radius: 15px; max-width: 70%;
+            word-wrap: break-word; animation: fadeIn 0.3s;
+        }
+
+        .sent { background: #0055ff; align-self: flex-end; }
+
+        .input-area {
+            padding: 20px; display: flex; gap: 10px; background: #1a1a2e;
+        }
+
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); display: flex;
+            align-items: center; justify-content: center; backdrop-filter: blur(5px);
+            z-index: 20;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div id="page-auth" class="page">
+        <div class="login-box">
+            <h2>Secret Space</h2>
+            <input type="text" id="reg-user" placeholder="Enter Username">
+            <input type="password" id="reg-pass" placeholder="Enter Password">
+            <button onclick="handleLogin()" style="width:100%">Get Started</button>
+        </div>
+    </div>
+
+    <div id="page-home" class="page hidden">
+        <div class="welcome-container" style="text-align: center;">
+            <h1 class="glow-text" id="welcome-user">Hello</h1>
+            <div id="sub-text" class="typing-text">WELCOME TO CHAT BOX</div>
+        </div>
+        <div class="fab" onclick="openPrivateChat()">+</div>
+    </div>
+
+    <div id="page-chat" class="page hidden" style="justify-content: flex-start;">
+        <div class="chat-container">
+            <div class="chat-header">
+                <button onclick="backToHome()" style="width: 80px;">← Back</button>
+                <span id="chat-with-name" style="margin-left: 20px; font-weight: bold;">Chat</span>
+            </div>
+            <div id="messages-container" class="messages-area"></div>
+            <div class="input-area">
+                <input type="text" id="msg-input" placeholder="Type a message..." style="margin:0;">
+                <button onclick="sendMessage()" style="width: 80px; margin: 0;">Send</button>
+            </div>
+        </div>
+    </div>
+
     <div id="chat-modal" class="modal hidden">
         <div class="login-box">
             <h3>New Private Chat</h3>
@@ -332,7 +498,7 @@
                 document.getElementById('page-home').classList.add('hidden');
                 document.getElementById('page-chat').classList.remove('hidden');
                 document.getElementById('chat-with-name').innerText = peer;
-            }
+            } else { alert("Please enter a name!"); }
         }
 
         function backToHome() {
