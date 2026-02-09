@@ -1,137 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Animated Secret Chat</title>
-    <style>
-        /* CSS: Smooth Background & Animations */
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(-45deg, #0f0f0f, #1a1a2e, #16213e, #0f0f0f);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            color: #ffffff;
-            overflow: hidden;
-        }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .page {
-            height: 100vh;
-            width: 100vw;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .hidden { display: none !important; }
-
-        /* Login Box Animation */
-        .login-box {
-            background: rgba(26, 26, 26, 0.9);
-            padding: 40px;
-            border-radius: 25px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            text-align: center;
-            width: 320px;
-            box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
-            animation: slideIn 1s cubic-bezier(0.17, 0.67, 0.83, 0.67);
-        }
-
-        @keyframes slideIn {
-            0% { opacity: 0; transform: translateY(100px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            margin: 12px 0;
-            border-radius: 12px;
-            border: 1px solid #333;
-            background: #222;
-            color: white;
-            box-sizing: border-box;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            margin-top: 20px;
-            border: none;
-            border-radius: 12px;
-            background: linear-gradient(90deg, #00d4ff, #0055ff);
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        /* Home Page Animations */
-        .glow-text {
-            font-size: 3.5rem;
-            margin-bottom: 0;
-            background: linear-gradient(90deg, #fff, #00d4ff, #fff);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-size: 200% auto;
-            animation: shine 3s linear infinite;
-        }
-
-        /* Typing Animation for "Welcome to chat box" */
-        .typing-text {
-            font-size: 1.2rem;
-            letter-spacing: 3px;
-            color: #00d4ff;
-            border-right: 2px solid #00d4ff;
-            white-space: nowrap;
-            overflow: hidden;
-            width: 0;
-            margin: 10px auto;
-        }
-
-        .start-typing {
-            animation: typing 3s steps(20) forwards, blink 0.7s infinite;
-        }
-
-        @keyframes typing {
-            from { width: 0; }
-            to { width: 100%; }
-        }
-
-        @keyframes blink {
-            50% { border-color: transparent; }
-        }
-
-        @keyframes shine {
-            to { background-position: 200% center; }
-        }
-
-        /* Floating Action Button (+) */
-        .fab {
-            position: fixed;
-            bottom: 40px;
-            right: 40px;
-            width: 70px;
-            height: 70px;
-            background: #00d4ff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-            color: #000;
-            cursor: pointer;
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -500,22 +367,132 @@
                 document.getElementById('chat-with-name').innerText = peer;
             } else { alert("Please enter a name!"); }
         }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secret Chat Box</title>
+    <style>
+        body, html {
+            margin: 0; padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: #0a0a0a; color: white; overflow: hidden;
+        }
 
-        function backToHome() {
+        .page { height: 100vh; width: 100vw; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .hidden { display: none !important; }
+
+        /* Login & Modal Box */
+        .box {
+            background: #1a1a1a; padding: 30px; border-radius: 20px;
+            border: 1px solid #00d4ff; text-align: center; width: 300px;
+        }
+
+        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 1px solid #333; background: #222; color: white; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; margin-top: 10px; border: none; border-radius: 10px; background: #00d4ff; color: black; font-weight: bold; cursor: pointer; }
+
+        /* Floating Button */
+        .fab {
+            position: fixed; bottom: 30px; right: 30px;
+            width: 65px; height: 65px; background: #00d4ff;
+            border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; font-size: 35px; color: black;
+            cursor: pointer; box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+        }
+
+        /* Chat Screen */
+        .chat-container { width: 100%; height: 100vh; display: flex; flex-direction: column; background: #000; }
+        .chat-header { padding: 15px; background: #111; display: flex; align-items: center; border-bottom: 1px solid #00d4ff; }
+        .messages-area { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .msg { padding: 10px; border-radius: 12px; background: #0055ff; align-self: flex-end; max-width: 80%; }
+        .input-area { padding: 15px; display: flex; gap: 10px; background: #111; }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: flex; align-items: center; justify-content: center; z-index: 100; }
+    </style>
+</head>
+<body>
+
+    <div id="page-auth" class="page">
+        <div class="box">
+            <h2>Secret Space</h2>
+            <input type="text" id="reg-user" placeholder="Your Name">
+            <input type="password" id="reg-pass" placeholder="Password">
+            <button onclick="handleLogin()">Get Started</button>
+        </div>
+    </div>
+
+    <div id="page-home" class="page hidden">
+        <h1 id="welcome-user">Hello</h1>
+        <p>Welcome to chat box</p>
+        <div class="fab" onclick="showModal()">+</div>
+    </div>
+
+    <div id="page-chat" class="page hidden">
+        <div class="chat-container">
+            <div class="chat-header">
+                <button onclick="goBackHome()" style="width: 70px;">Back</button>
+                <span id="chat-title" style="margin-left: 20px; font-weight: bold;">Chat</span>
+            </div>
+            <div id="msg-display" class="messages-area"></div>
+            <div class="input-area">
+                <input type="text" id="msg-input" placeholder="Type a message..." style="margin:0;">
+                <button onclick="send()" style="width: 80px; margin:0;">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-box" class="modal-overlay hidden">
+        <div class="box">
+            <h3>Start Private Chat</h3>
+            <input type="text" id="friend-name" placeholder="Friend's Name">
+            <button onclick="startChatNow()">Open Chat</button>
+            <button onclick="hideModal()" style="background: #333; color: white;">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        // ലോഗിൻ ഫങ്ക്ഷൻ
+        function handleLogin() {
+            const user = document.getElementById('reg-user').value;
+            if(user.trim() !== "") {
+                document.getElementById('page-auth').classList.add('hidden');
+                document.getElementById('page-home').classList.remove('hidden');
+                document.getElementById('welcome-user').innerText = "Hello, " + user;
+            } else { alert("Please enter your name!"); }
+        }
+
+        // മോഡൽ കാണിക്കാൻ
+        function showModal() { document.getElementById('modal-box').classList.remove('hidden'); }
+        function hideModal() { document.getElementById('modal-box').classList.add('hidden'); }
+
+        // ചാറ്റ് തുടങ്ങാൻ (ഇതാണ് നിങ്ങൾ ചോദിച്ച ഭാഗം)
+        function startChatNow() {
+            const friend = document.getElementById('friend-name').value;
+            if(friend.trim() !== "") {
+                document.getElementById('modal-box').classList.add('hidden');
+                document.getElementById('page-home').classList.add('hidden');
+                document.getElementById('page-chat').classList.remove('hidden'); // ഇത് ചാറ്റ് സ്ക്രീൻ കാണിക്കും
+                document.getElementById('chat-title').innerText = "Chatting with " + friend;
+            } else { alert("Enter friend's name!"); }
+        }
+
+        // തിരികെ പോകാൻ
+        function goBackHome() {
             document.getElementById('page-chat').classList.add('hidden');
             document.getElementById('page-home').classList.remove('hidden');
         }
 
-        function sendMessage() {
+        // മെസേജ് അയക്കാൻ
+        function send() {
             const input = document.getElementById('msg-input');
-            const container = document.getElementById('messages-container');
-            if (input.value.trim() !== "") {
-                const msgDiv = document.createElement('div');
-                msgDiv.className = 'message sent';
-                msgDiv.innerText = input.value;
-                container.appendChild(msgDiv);
+            if(input.value.trim() !== "") {
+                const div = document.createElement('div');
+                div.className = 'msg';
+                div.innerText = input.value;
+                document.getElementById('msg-display').appendChild(div);
                 input.value = "";
-                container.scrollTop = container.scrollHeight;
+                document.getElementById('msg-display').scrollTop = document.getElementById('msg-display').scrollHeight;
             }
         }
     </script>
